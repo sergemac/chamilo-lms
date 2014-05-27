@@ -867,6 +867,36 @@ function get_attempt_count($user_id, $exerciseId, $lp_id, $lp_item_id,$lp_item_v
  * @param int $lp_item_id
  * @return int
  */
+ 
+ function get_attempt_count_incomplete($user_id, $exerciseId, $lp_id, $lp_item_id)
+{
+    $stat_table 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $user_id 		= intval($user_id);
+    $exerciseId 	= intval($exerciseId);
+    $lp_id 			= intval($lp_id);
+    $lp_item_id 	= intval($lp_item_id);
+    if(isset($lp_item_view_id)){
+        $lp_item_view_id= intval($lp_item_view_id);
+    }
+
+    $sql = "SELECT count(*) as count FROM $stat_table WHERE
+        		exe_exo_id 			= $exerciseId AND
+        		exe_user_id 		= $user_id AND
+        		status 				!= 'incomplete' AND
+        		orig_lp_id 			= $lp_id AND
+        		orig_lp_item_id 	= $lp_item_id AND
+        		exe_cours_id = '".api_get_course_id()."' AND
+        		session_id = '" . api_get_session_id() . "'";
+
+    $query = Database::query($sql);
+    if (Database::num_rows($query) > 0 ) {
+        $attempt = Database :: fetch_array($query,'ASSOC');
+        return $attempt['count'];
+    } else {
+        return 0;
+    }
+}
+/*
 function get_attempt_count_not_finished($user_id, $exerciseId, $lp_id, $lp_item_id)
 {
     $stat_table 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
@@ -893,6 +923,7 @@ function get_attempt_count_not_finished($user_id, $exerciseId, $lp_id, $lp_item_
         return 0;
     }
 }
+*/
 
 /**
  * Deletes a learning path view for a student
