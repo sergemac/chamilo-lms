@@ -3854,7 +3854,7 @@ class Exercise
         if ($is_visible) {
             if ($exerciseAttempts > 0) {
 
-                $attempt_count = get_attempt_count_not_finished(
+                $attempt_count = get_attempt_count_incomplete(
                     api_get_user_id(),
                     $this->id,
                     $lp_id,
